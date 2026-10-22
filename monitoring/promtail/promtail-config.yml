@@ -1,0 +1,31 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+  log_level: info
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: spring-boot
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: spring-boot
+          service: club-management-app
+          container: club-management-app
+          __path__: /var/log/app/*.log
+
+  - job_name: nginx
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          service: club-management-nginx
+          container: club-management-nginx
+          __path__: /var/log/nginx/*.log
