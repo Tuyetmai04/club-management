@@ -1,0 +1,29 @@
+# Environment variables file
+.env
+
+# SSL Private Keys and Certificates
+nginx/ssl/*.key
+nginx/ssl/*.crt
+nginx/ssl/*.csr
+
+# Maven build artifacts
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!target/classes
+
+# IDE / Editor files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Log files
+*.log
+
+# Private keys and certificate bundles
+*.pem
+*.p12
+*.pfx
+*.key
