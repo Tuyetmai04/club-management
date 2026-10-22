@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Quản lý Sự kiện', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <!-- Header Controls -->
+    <div class="card card-table mb-4 p-3 bg-white">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-8">
+                <form th:action="@{/events}" method="get" class="row g-2">
+                    <div class="col-12 col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Tìm theo tên sự kiện, mã SK, địa điểm...">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <button type="submit" class="btn btn-secondary w-100"><i class="fa-solid fa-filter me-1"></i> Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+                <a th:href="@{/events/new}" class="btn btn-success shadow-sm rounded-pill px-3">
+                    <i class="fa-solid fa-plus me-1"></i> Tạo sự kiện mới
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card card-table">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã SK</th>
+                    <th>Tên sự kiện</th>
+                    <th>Thời gian bắt đầu</th>
+                    <th>Thời gian kết thúc</th>
+                    <th>Số lượng</th>
+                    <th>Người chủ trì</th>
+                    <th>Địa điểm</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="event, iterStat : ${events}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td><strong th:text="${event.eventCode}" class="text-success">SK001</strong></td>
+                    <td th:text="${event.title}">Tên sự kiện</td>
+                    <td th:text="${#temporals.format(event.startTime, 'dd/MM/yyyy HH:mm')}">01/01/2026 08:00</td>
+                    <td th:text="${#temporals.format(event.endTime, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
+                    <td th:text="${event.maxParticipants} + ' người'">50 người</td>
+                    <td th:text="${event.host}">Nguyễn Văn A</td>
+                    <td th:text="${event.location}">Hội trường A</td>
+                    <td>
+                        <span class="badge" th:classappend="${event.statusBadgeClass}" th:text="${event.statusText}">Sắp diễn ra</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a th:href="@{/events/view/{id}(id=${event.id})}" class="btn btn-outline-info" title="Xem chi tiết">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a th:href="@{/events/edit/{id}(id=${event.id})}" class="btn btn-outline-warning" title="Chỉnh sửa">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a th:href="@{/events/delete/{id}(id=${event.id})}" class="btn btn-outline-danger" title="Xóa"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa sự kiện này không?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(events)}">
+                    <td colspan="10" class="text-center text-muted py-4">
+                        <i class="fa-solid fa-folder-open fa-2x mb-2 text-secondary d-block"></i>
+                        Không tìm thấy sự kiện nào.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

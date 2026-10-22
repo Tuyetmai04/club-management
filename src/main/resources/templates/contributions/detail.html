@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Chi tiết Khoản Đóng Góp', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card card-table p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <h5 class="m-0 text-warning text-dark fw-bold">
+                        <i class="fa-solid fa-receipt me-2"></i> Phiếu Ghi Nhận Đóng Góp
+                    </h5>
+                    <div>
+                        <a th:href="@{/contributions/edit/{id}(id=${contribution.id})}" class="btn btn-warning btn-sm me-2">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh sửa
+                        </a>
+                        <a th:href="@{/contributions}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Mã khoản đóng góp</p>
+                        <h6 class="fw-bold text-dark" th:text="${contribution.contributionCode}">DG001</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Ngày đóng góp</p>
+                        <p class="fw-semibold" th:text="${#temporals.format(contribution.contributionDate, 'dd/MM/yyyy')}">01/10/2026</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Thành viên đóng góp</p>
+                        <h6 class="fw-bold text-primary" th:text="${contribution.member.fullName} + ' (' + ${contribution.member.memberCode} + ')'">Nguyễn Văn A</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Người thu/nhận</p>
+                        <p class="fw-semibold" th:text="${contribution.collector}">Phạm Minh Tuấn</p>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted small mb-1">Nội dung đóng góp</p>
+                        <h5 class="fw-bold text-dark" th:text="${contribution.title}">Đóng quỹ tháng 10</h5>
+                    </div>
+                    <div class="col-12">
+                        <div class="p-3 bg-success-subtle rounded text-success border border-success-subtle d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">Số tiền đóng góp:</span>
+                            <h3 class="m-0 fw-bold" th:text="${#numbers.formatDecimal(contribution.amount, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'">100,000 VNĐ</h3>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted small mb-1">Ghi chú</p>
+                        <div class="p-3 bg-light rounded border" th:text="${contribution.note ?: 'Không có ghi chú thêm'}">Ghi chú</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

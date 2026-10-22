@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Trang tổng quan', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <!-- Header Banner -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Tổng quan hoạt động Câu lạc bộ</h4>
+            <p class="text-muted small m-0">Thống kê dữ liệu tổng hợp theo thời gian thực</p>
+        </div>
+        <div>
+            <a th:href="@{/members/new}" class="btn btn-primary rounded-pill px-3 shadow-sm me-2">
+                <i class="fa-solid fa-user-plus me-1"></i> + Thành viên
+            </a>
+            <a th:href="@{/events/new}" class="btn btn-success rounded-pill px-3 shadow-sm">
+                <i class="fa-solid fa-calendar-plus me-1"></i> + Sự kiện
+            </a>
+        </div>
+    </div>
+
+    <!-- Stat Cards Row -->
+    <div class="row g-3 mb-4">
+        <!-- Members Stat Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-bold">Thành viên CLB</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0" th:text="${totalMembers}">0</h3>
+                        <span class="badge bg-success-subtle text-success mt-2" th:text="${activeMembers} + ' đang hoạt động'">0 active</span>
+                    </div>
+                    <div class="icon-box bg-primary-subtle text-primary">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Stat Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-bold">Tổng Sự kiện</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0" th:text="${totalEvents}">0</h3>
+                        <span class="badge bg-info-subtle text-info mt-2">Các chương trình CLB</span>
+                    </div>
+                    <div class="icon-box bg-success-subtle text-success">
+                        <i class="fa-solid fa-calendar-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contributions Stat Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-bold">Tổng Đóng góp</span>
+                        <h4 class="fw-bold text-success mt-1 mb-0" th:text="${totalContributionAmount}">0 VNĐ</h4>
+                        <span class="badge bg-warning-subtle text-warning mt-2" th:text="${totalContributions} + ' lượt đóng góp'">0 lượt</span>
+                    </div>
+                    <div class="icon-box bg-warning-subtle text-warning">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meetings Stat Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card stat-card p-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-bold">Tổng Cuộc họp</span>
+                        <h3 class="fw-bold text-dark mt-1 mb-0" th:text="${totalMeetings}">0</h3>
+                        <span class="badge bg-primary-subtle text-primary mt-2">Cuộc họp &amp; Giao lưu</span>
+                    </div>
+                    <div class="icon-box bg-info-subtle text-info">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Data Tables Row -->
+    <div class="row g-4">
+        <!-- Recent Members -->
+        <div class="col-12 col-lg-6">
+            <div class="card card-table h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+                    <h6 class="m-0 fw-bold text-primary"><i class="fa-solid fa-user-group me-2"></i>Thành viên mới tham gia</h6>
+                    <a th:href="@{/members}" class="btn btn-sm btn-link text-decoration-none">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle m-0">
+                        <thead>
+                        <tr>
+                            <th>Mã TV</th>
+                            <th>Họ và tên</th>
+                            <th>Chức vụ</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="m : ${recentMembers}">
+                            <td><strong th:text="${m.memberCode}" class="text-primary">TV001</strong></td>
+                            <td th:text="${m.fullName}">Nguyễn Văn A</td>
+                            <td th:text="${m.position}">Thành viên</td>
+                            <td>
+                                <span class="badge" th:classappend="${m.statusBadgeClass}" th:text="${m.status}">Đang hoạt động</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(recentMembers)}">
+                            <td colspan="4" class="text-center text-muted py-3">Chưa có thành viên nào</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Events -->
+        <div class="col-12 col-lg-6">
+            <div class="card card-table h-100">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+                    <h6 class="m-0 fw-bold text-success"><i class="fa-solid fa-calendar-check me-2"></i>Sự kiện gần đây</h6>
+                    <a th:href="@{/events}" class="btn btn-sm btn-link text-decoration-none">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle m-0">
+                        <thead>
+                        <tr>
+                            <th>Mã SK</th>
+                            <th>Tên sự kiện</th>
+                            <th>Địa điểm</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="e : ${recentEvents}">
+                            <td><strong th:text="${e.eventCode}" class="text-success">SK001</strong></td>
+                            <td th:text="${e.title}">Sự kiện A</td>
+                            <td th:text="${e.location}">Hội trường A</td>
+                            <td>
+                                <span class="badge" th:classappend="${e.statusBadgeClass}" th:text="${e.statusText}">Sắp diễn ra</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(recentEvents)}">
+                            <td colspan="4" class="text-center text-muted py-3">Chưa có sự kiện nào</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

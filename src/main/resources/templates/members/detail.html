@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Chi tiết Thành viên', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card card-table p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <h5 class="m-0 text-primary fw-bold">
+                        <i class="fa-solid fa-id-card me-2"></i> Hồ sơ Thành viên
+                    </h5>
+                    <div>
+                        <a th:href="@{/members/edit/{id}(id=${member.id})}" class="btn btn-warning btn-sm me-2">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh sửa
+                        </a>
+                        <a th:href="@{/members}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Mã thành viên</p>
+                        <h6 class="fw-bold text-primary" th:text="${member.memberCode}">TV001</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Họ và tên</p>
+                        <h6 class="fw-bold text-dark" th:text="${member.fullName}">Nguyễn Văn A</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Ngày sinh</p>
+                        <p class="fw-semibold" th:text="${#temporals.format(member.dateOfBirth, 'dd/MM/yyyy')}">01/01/2000</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Email</p>
+                        <p class="fw-semibold" th:text="${member.email}">an@gmail.com</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Số điện thoại</p>
+                        <p class="fw-semibold" th:text="${member.phone}">0912345678</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Ngày tham gia</p>
+                        <p class="fw-semibold" th:text="${#temporals.format(member.joinDate, 'dd/MM/yyyy')}">01/09/2023</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Chức vụ</p>
+                        <p class="fw-semibold" th:text="${member.position}">Thành viên</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Trạng thái</p>
+                        <span class="badge" th:classappend="${member.statusBadgeClass}" th:text="${member.status}">Đang hoạt động</span>
+                    </div>
+                </div>
+
+                <!-- Related Contributions -->
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-receipt me-2"></i>Lịch sử đóng góp</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Mã ĐG</th>
+                                <th>Nội dung</th>
+                                <th>Số tiền</th>
+                                <th>Ngày đóng</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="c : ${member.contributions}">
+                                <td th:text="${c.contributionCode}">DG001</td>
+                                <td th:text="${c.title}">Đóng quỹ</td>
+                                <td th:text="${#numbers.formatDecimal(c.amount, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'" class="text-success fw-bold">100,000 VNĐ</td>
+                                <td th:text="${#temporals.format(c.contributionDate, 'dd/MM/yyyy')}">01/10/2026</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(member.contributions)}">
+                                <td colspan="4" class="text-center text-muted py-2">Thành viên chưa có khoản đóng góp nào</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

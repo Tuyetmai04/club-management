@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Quản lý Cuộc họp', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <!-- Header Controls -->
+    <div class="card card-table mb-4 p-3 bg-white">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-8">
+                <form th:action="@{/meetings}" method="get" class="row g-2">
+                    <div class="col-12 col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Tìm theo tên cuộc họp, mã CH, người chủ trì...">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <button type="submit" class="btn btn-secondary w-100"><i class="fa-solid fa-filter me-1"></i> Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+                <a th:href="@{/meetings/new}" class="btn btn-info text-dark shadow-sm rounded-pill px-3 fw-semibold">
+                    <i class="fa-solid fa-plus me-1"></i> Lên lịch cuộc họp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card card-table">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã CH</th>
+                    <th>Tên cuộc họp</th>
+                    <th>Hình thức</th>
+                    <th>Địa điểm / Link</th>
+                    <th>Ngày giờ họp</th>
+                    <th>Người chủ trì</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="m, iterStat : ${meetings}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td><strong th:text="${m.meetingCode}" class="text-info text-dark">CH001</strong></td>
+                    <td th:text="${m.title}">Họp BCN</td>
+                    <td>
+                        <span class="badge" th:classappend="${m.formatBadgeClass}" th:text="${m.format}">Trực tiếp</span>
+                    </td>
+                    <td th:text="${m.location}">Phòng họp A</td>
+                    <td th:text="${#temporals.format(m.meetingTime, 'dd/MM/yyyy HH:mm')}" class="fw-semibold">15/10/2026 19:00</td>
+                    <td th:text="${m.host}">Nguyễn Văn A</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a th:href="@{/meetings/view/{id}(id=${m.id})}" class="btn btn-outline-info" title="Xem chi tiết">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a th:href="@{/meetings/edit/{id}(id=${m.id})}" class="btn btn-outline-warning" title="Chỉnh sửa">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a th:href="@{/meetings/delete/{id}(id=${m.id})}" class="btn btn-outline-danger" title="Xóa"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa cuộc họp này không?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(meetings)}">
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fa-solid fa-folder-open fa-2x mb-2 text-secondary d-block"></i>
+                        Không tìm thấy cuộc họp nào.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

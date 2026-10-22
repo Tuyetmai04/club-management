@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Chi tiết Cuộc Họp', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card card-table p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <h5 class="m-0 text-info text-dark fw-bold">
+                        <i class="fa-solid fa-handshake me-2"></i> Chi Tiết Cuộc Họp
+                    </h5>
+                    <div>
+                        <a th:href="@{/meetings/edit/{id}(id=${meeting.id})}" class="btn btn-warning btn-sm me-2">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh sửa
+                        </a>
+                        <a th:href="@{/meetings}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Mã cuộc họp</p>
+                        <h6 class="fw-bold text-dark" th:text="${meeting.meetingCode}">CH001</h6>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Hình thức</p>
+                        <span class="badge" th:classappend="${meeting.formatBadgeClass}" th:text="${meeting.format}">Trực tiếp</span>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted small mb-1">Tên cuộc họp</p>
+                        <h5 class="fw-bold text-dark" th:text="${meeting.title}">Họp BCN</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Thời gian họp</p>
+                        <p class="fw-semibold text-primary" th:text="${#temporals.format(meeting.meetingTime, 'HH:mm - dd/MM/yyyy')}">19:00 - 15/10/2026</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small mb-1">Người chủ trì</p>
+                        <p class="fw-semibold" th:text="${meeting.host}">Nguyễn Văn A</p>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted small mb-1">Địa điểm / Đường dẫn họp</p>
+                        <p class="fw-semibold text-dark" th:text="${meeting.location}">Phòng B201</p>
+                    </div>
+                    <div class="col-12">
+                        <p class="text-muted small mb-1">Nội dung chi tiết &amp; Biên bản cuộc họp</p>
+                        <div class="p-3 bg-light rounded border" th:text="${meeting.content ?: 'Chưa có nội dung ghi chép'}">Nội dung</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(${isEdit ? 'Chỉnh sửa Thành viên' : 'Thêm mới Thành viên'}, ~{::content})}">
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-9">
+            <div class="card card-table p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <h5 class="m-0 text-primary fw-bold">
+                        <i class="fa-solid" th:classappend="${isEdit ? 'fa-user-pen' : 'fa-user-plus'}"></i>
+                        <span th:text="${isEdit ? 'Cập nhật thông tin thành viên' : 'Nhập thông tin thành viên mới'}">Thành viên</span>
+                    </h5>
+                    <a th:href="@{/members}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Quay lại
+                    </a>
+                </div>
+
+                <form th:action="@{/members/save}" th:object="${member}" method="post">
+                    <input type="hidden" th:field="*{id}">
+
+                    <div class="row g-3">
+                        <!-- Mã thành viên -->
+                        <div class="col-12 col-md-6">
+                            <label for="memberCode" class="form-label fw-bold">Mã thành viên <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{memberCode}" class="form-control" th:classappend="${#fields.hasErrors('memberCode')} ? 'is-invalid' : ''" placeholder="VD: TV001">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('memberCode')}" th:errors="*{memberCode}">Lỗi mã thành viên</div>
+                        </div>
+
+                        <!-- Họ và tên -->
+                        <div class="col-12 col-md-6">
+                            <label for="fullName" class="form-label fw-bold">Họ và tên <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{fullName}" class="form-control" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''" placeholder="VD: Nguyễn Văn A">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Lỗi họ tên</div>
+                        </div>
+
+                        <!-- Ngày sinh -->
+                        <div class="col-12 col-md-6">
+                            <label for="dateOfBirth" class="form-label fw-bold">Ngày sinh <span class="text-danger">*</span></label>
+                            <input type="date" th:field="*{dateOfBirth}" class="form-control" th:classappend="${#fields.hasErrors('dateOfBirth')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">Lỗi ngày sinh</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-12 col-md-6">
+                            <label for="email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                            <input type="email" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" placeholder="VD: example@gmail.com">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Lỗi email</div>
+                        </div>
+
+                        <!-- Số điện thoại -->
+                        <div class="col-12 col-md-6">
+                            <label for="phone" class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{phone}" class="form-control" th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''" placeholder="VD: 0912345678">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Lỗi số điện thoại</div>
+                        </div>
+
+                        <!-- Ngày tham gia -->
+                        <div class="col-12 col-md-6">
+                            <label for="joinDate" class="form-label fw-bold">Ngày tham gia <span class="text-danger">*</span></label>
+                            <input type="date" th:field="*{joinDate}" class="form-control" th:classappend="${#fields.hasErrors('joinDate')} ? 'is-invalid' : ''">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('joinDate')}" th:errors="*{joinDate}">Lỗi ngày tham gia</div>
+                        </div>
+
+                        <!-- Chức vụ -->
+                        <div class="col-12 col-md-6">
+                            <label for="position" class="form-label fw-bold">Chức vụ <span class="text-danger">*</span></label>
+                            <select th:field="*{position}" class="form-select" th:classappend="${#fields.hasErrors('position')} ? 'is-invalid' : ''">
+                                <option value="">-- Chọn chức vụ --</option>
+                                <option value="Chủ nhiệm">Chủ nhiệm</option>
+                                <option value="Phó chủ nhiệm">Phó chủ nhiệm</option>
+                                <option value="Trưởng ban Truyền thông">Trưởng ban Truyền thông</option>
+                                <option value="Trưởng ban Tài chính">Trưởng ban Tài chính</option>
+                                <option value="Trưởng ban Kỹ thuật">Trưởng ban Kỹ thuật</option>
+                                <option value="Thành viên">Thành viên</option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">Lỗi chức vụ</div>
+                        </div>
+
+                        <!-- Trạng thái -->
+                        <div class="col-12 col-md-6">
+                            <label for="status" class="form-label fw-bold">Trạng thái <span class="text-danger">*</span></label>
+                            <select th:field="*{status}" class="form-select" th:classappend="${#fields.hasErrors('status')} ? 'is-invalid' : ''">
+                                <option value="Đang hoạt động">Đang hoạt động</option>
+                                <option value="Tạm nghỉ">Tạm nghỉ</option>
+                                <option value="Đã rời CLB">Đã rời CLB</option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Lỗi trạng thái</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top text-end">
+                        <a th:href="@{/members}" class="btn btn-light me-2">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-save me-1"></i> Lưu thông tin</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Quản lý Đóng góp', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <!-- Header Controls & Total -->
+    <div class="card card-table mb-4 p-3 bg-white">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-7">
+                <form th:action="@{/contributions}" method="get" class="row g-2">
+                    <div class="col-12 col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Tìm theo mã, nội dung, thành viên, người thu...">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <button type="submit" class="btn btn-secondary w-100"><i class="fa-solid fa-filter me-1"></i> Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-md-5 text-md-end d-flex align-items-center justify-content-md-end gap-3">
+                <div class="text-end">
+                    <span class="text-muted small d-block">Tổng quỹ thu thập</span>
+                    <strong class="text-success h5 m-0" th:text="${#numbers.formatDecimal(totalAmount, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'">0 VNĐ</strong>
+                </div>
+                <a th:href="@{/contributions/new}" class="btn btn-warning shadow-sm rounded-pill px-3 text-dark fw-semibold">
+                    <i class="fa-solid fa-plus me-1"></i> Ghi nhận đóng góp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card card-table">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã ĐG</th>
+                    <th>Thành viên đóng góp</th>
+                    <th>Nội dung đóng góp</th>
+                    <th>Số tiền (VNĐ)</th>
+                    <th>Ngày đóng</th>
+                    <th>Người thu/nhận</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c, iterStat : ${contributions}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td><strong th:text="${c.contributionCode}" class="text-warning text-dark">DG001</strong></td>
+                    <td>
+                        <strong th:text="${c.member.fullName}">Nguyễn Văn A</strong>
+                        <br>
+                        <small class="text-muted" th:text="'(' + ${c.member.memberCode} + ')'">(TV001)</small>
+                    </td>
+                    <td th:text="${c.title}">Đóng quỹ tháng 10</td>
+                    <td>
+                        <strong class="text-success" th:text="${#numbers.formatDecimal(c.amount, 1, 'POINT', 0, 'COMMA')} + ' VNĐ'">100,000 VNĐ</strong>
+                    </td>
+                    <td th:text="${#temporals.format(c.contributionDate, 'dd/MM/yyyy')}">01/10/2026</td>
+                    <td th:text="${c.collector}">Phạm Minh Tuấn</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a th:href="@{/contributions/view/{id}(id=${c.id})}" class="btn btn-outline-info" title="Xem chi tiết">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a th:href="@{/contributions/edit/{id}(id=${c.id})}" class="btn btn-outline-warning" title="Chỉnh sửa">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a th:href="@{/contributions/delete/{id}(id=${c.id})}" class="btn btn-outline-danger" title="Xóa"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa khoản đóng góp này không?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(contributions)}">
+                    <td colspan="8" class="text-center text-muted py-4">
+                        <i class="fa-solid fa-folder-open fa-2x mb-2 text-secondary d-block"></i>
+                        Không tìm thấy khoản đóng góp nào.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

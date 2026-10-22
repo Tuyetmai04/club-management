@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Quản lý Thành viên', ~{::content})}">
+<body>
+<div th:fragment="content">
+    <!-- Header Controls -->
+    <div class="card card-table mb-4 p-3 bg-white">
+        <div class="row g-3 align-items-center justify-content-between">
+            <div class="col-12 col-md-8">
+                <form th:action="@{/members}" method="get" class="row g-2">
+                    <div class="col-12 col-sm-6 col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Tìm theo tên, mã TV, email...">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-4">
+                        <select name="status" class="form-select">
+                            <option value="">-- Tất cả trạng thái --</option>
+                            <option value="Đang hoạt động" th:selected="${status == 'Đang hoạt động'}">Đang hoạt động</option>
+                            <option value="Tạm nghỉ" th:selected="${status == 'Tạm nghỉ'}">Tạm nghỉ</option>
+                            <option value="Đã rời CLB" th:selected="${status == 'Đã rời CLB'}">Đã rời CLB</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-3">
+                        <button type="submit" class="btn btn-secondary w-100"><i class="fa-solid fa-filter me-1"></i> Lọc</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+                <a th:href="@{/members/new}" class="btn btn-primary shadow-sm rounded-pill px-3">
+                    <i class="fa-solid fa-plus me-1"></i> Thêm thành viên mới
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card card-table">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã TV</th>
+                    <th>Họ và tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>Chức vụ</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member, iterStat : ${members}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td><strong th:text="${member.memberCode}" class="text-primary">TV001</strong></td>
+                    <td th:text="${member.fullName}">Nguyễn Văn A</td>
+                    <td th:text="${#temporals.format(member.dateOfBirth, 'dd/MM/yyyy')}">01/01/2000</td>
+                    <td th:text="${member.email}">an@gmail.com</td>
+                    <td th:text="${member.phone}">0912345678</td>
+                    <td th:text="${member.position}">Thành viên</td>
+                    <td>
+                        <span class="badge" th:classappend="${member.statusBadgeClass}" th:text="${member.status}">Đang hoạt động</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                            <a th:href="@{/members/view/{id}(id=${member.id})}" class="btn btn-outline-info" title="Xem chi tiết">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a th:href="@{/members/edit/{id}(id=${member.id})}" class="btn btn-outline-warning" title="Chỉnh sửa">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                            <a th:href="@{/members/delete/{id}(id=${member.id})}" class="btn btn-outline-danger" title="Xóa"
+                               onclick="return confirm('Bạn có chắc chắn muốn xóa thành viên này không?');">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(members)}">
+                    <td colspan="9" class="text-center text-muted py-4">
+                        <i class="fa-solid fa-folder-open fa-2x mb-2 text-secondary d-block"></i>
+                        Không tìm thấy thành viên nào phù hợp.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
